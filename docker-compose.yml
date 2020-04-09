@@ -1,0 +1,47 @@
+version: '2.2'
+services:
+  discovery-server:
+    container_name: service-order
+    build:
+      context: ./nagp-adv-msa-service-order
+      dockerfile: Dockerfile
+    image: mvarun96/adv-msa-service-order:latest
+    expose:
+      - 8082
+    ports:
+      - 8082:8082
+    networks:
+      - adv-msa-network
+    logging:
+      driver: json-file
+  adv-msa-service-user:
+    container_name: service-user
+    build:
+      context: ./nagp-adv-msa-service-user
+      dockerfile: Dockerfile
+    image: mvarun96/adv-msa-service-user:latest
+    expose:
+      - 8081
+    ports:
+      - 8081:8081
+    logging:
+      driver: json-file
+    networks:
+      - adv-msa-network
+  adv-msa-service-orderdetails:
+    container_name: service-orderdetails
+    build:
+      context: ./nagp-adv-msa-service-orderdetails
+      dockerfile: Dockerfile
+    image: mvarun96/adv-msa-service-orderdetails:latest
+    expose:
+      - 8084
+    ports:
+      - 8084:8084
+    logging:
+      driver: json-file
+    networks:
+      - adv-msa-network
+networks:
+  adv-msa-network:
+    driver: bridge
