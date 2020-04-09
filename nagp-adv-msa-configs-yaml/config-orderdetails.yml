@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adv-msa-service-orderdetails
+  labels:
+    app: adv-msa-service-orderdetails
+spec:
+  replicas: 2
+  selector:
+   matchLabels:
+    app: adv-msa-service-orderdetails
+  template: 
+    metadata:
+      labels:
+        app: adv-msa-service-orderdetails
+    spec:
+      containers:
+      - name: adv-msa-service-orderdetails
+        image: mvarun96/adv-msa-service-orderdetails
+        ports:
+        - containerPort: 8084
+        env:
+          - name: OPENTRACING_JAEGER_UDP_SENDER_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: jaeger-config
+                key: opentracing.jaeger.udp-sender.host
+          - name: OPENTRACING_JAEGER_UDP_SENDER_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: jaeger-config
+                key: opentracing.jaeger.udp-sender.port
+          - name: SERVICE_ORDER
+            value: http://adv-msa-service-order-w6btm
+          - name: SERVICE_USER
+            value: http://adv-msa-service-user-2tg5n
